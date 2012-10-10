@@ -163,6 +163,78 @@ void amdevice_Callback(struct am_device_notification_callback_info *info, void *
 }
 
 
+CFMutableArrayRef process_iconState(CFArrayRef iconState, int *didFindNewsstand)
+{
+    CFMutableArrayRef processedState = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
+    int foundNewsstand = 0;
+    
+    CFIndex outerIndex = 0;
+    for (outerIndex = 0; outerIndex < CFArrayGetCount(iconState); outerIndex++)
+    {
+        CFArrayRef innerArray = CFArrayGetValueAtIndex(iconState, outerIndex);
+        CFMutableArrayRef processedInnerArray = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0, innerArray);
+        
+        CFIndex innerIndex = 0;
+        for (innerIndex = 0; innerIndex < CFArrayGetCount(innerArray); innerIndex++)
+        {
+            CFMutableDictionaryRef iconDict =  CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0,
+                                                                             CFArrayGetValueAtIndex(innerArray, innerIndex));
+            CFStringRef listType;
+            
+            if (CFDictionaryGetValueIfPresent(iconDict, CFSTR("listType"), (const void **)&listType) &&
+                CFStringCompare(listType, CFSTR("newsstand"), 0) == kCFCompareEqualTo)
+            {
+                DLog(@"Found Newsstand: (%ld,%ld)",outerIndex,innerIndex);
+                foundNewsstand = 1;
+                
+                CFMutableDictionaryRef magicFolder = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,
+                                                                               &kCFTypeDictionaryKeyCallBacks,
+                                                                               &kCFTypeDictionaryValueCallBacks);
+                
+                CFDictionarySetValue(magicFolder, CFSTR("displayName"), CFSTR("Magic"));
+                CFDictionarySetValue(magicFolder, CFSTR("listType"), CFSTR("folder"));
+
+
+                CFMutableArrayRef iconLists = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
+                CFMutableArrayRef singleList = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
+                
+                CFArrayAppendValue(singleList, iconDict);
+                CFArrayAppendValue(iconLists, singleList);
+                
+                CFDictionarySetValue(magicFolder, CFSTR("iconLists"), iconLists);
+                
+                CFArraySetValueAtIndex(processedInnerArray, innerIndex, magicFolder);
+                
+                CFRelease(iconLists);
+                CFRelease(singleList);
+                CFRelease(magicFolder);
+
+            } else
+            {
+                CFDictionaryRemoveValue(iconDict, CFSTR("iconModDate"));
+                CFArrayAppendValue(processedInnerArray, iconDict);
+                
+                CFRelease(iconDict);
+            }
+        }
+        
+        CFArrayAppendValue(processedState, processedInnerArray);
+        
+        CFRelease(processedInnerArray);
+    }
+    
+    *didFindNewsstand = foundNewsstand;
+    if (!foundNewsstand)
+    {
+        CFRelease(processedState);
+        return NULL;
+    }
+    
+    return processedState;
+}
+
+
+
 void hide_newsstand(struct am_device *device)
 {
     CFStringRef error = NULL;
@@ -178,7 +250,6 @@ void hide_newsstand(struct am_device *device)
         CFDictionarySetValue(dict, CFSTR("command"), CFSTR("getIconState"));
         CFDictionarySetValue(dict, CFSTR("formatVersion"), CFSTR("2"));
         
-        
         DLog(@"Getting icon state from device");
         
         if (send_xml_message(connection, dict))
@@ -189,75 +260,19 @@ void hide_newsstand(struct am_device *device)
             {
                 DLog(@"Looking for Newsstand");
                 
-                CFArrayRef outerArray = (CFArrayRef)reply;
-                CFMutableArrayRef iconStateArray = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0, outerArray);
-                CFIndex outerIndex = 0;
-            
+                CFArrayRef iconStateArray = (CFArrayRef)reply;
                 int foundNewsstand = 0;
                 
-                for (outerIndex = 0; outerIndex < CFArrayGetCount(outerArray); outerIndex++)
-                {
-                    int shouldBreak = 0;
-                    CFArrayRef innerArray = CFArrayGetValueAtIndex(outerArray, outerIndex);
-                    CFIndex innerIndex = 0;                    
-                    
-                    for (innerIndex = 0; innerIndex < CFArrayGetCount(innerArray); innerIndex++)
-                    {
-                        CFDictionaryRef iconDict = CFArrayGetValueAtIndex(innerArray, innerIndex);
-                        CFStringRef listType;
-                        
-                        if (CFDictionaryGetValueIfPresent(iconDict, CFSTR("listType"), (const void **)&listType) &&
-                            CFStringCompare(listType, CFSTR("newsstand"), 0) == kCFCompareEqualTo)
-                        {
-                            DLog(@"Found: %@", (NSDictionary *)iconDict);
-                            
-                            foundNewsstand = 1;
-                            
-                            CFMutableDictionaryRef magicFolder = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,
-                                                                                           &kCFTypeDictionaryKeyCallBacks,
-                                                                                           &kCFTypeDictionaryValueCallBacks);
-                            
-                            
-                            
-                            CFDictionarySetValue(magicFolder, CFSTR("displayName"), CFSTR("Magic"));
-                            CFDictionarySetValue(magicFolder, CFSTR("listType"), CFSTR("folder"));
-                            
-                            CFMutableArrayRef iconLists = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
-                            CFMutableArrayRef singleList = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
-                            
-                            CFArrayAppendValue(singleList, iconDict);
-                            CFArrayAppendValue(iconLists, singleList);
-                            
-                            CFDictionarySetValue(magicFolder, CFSTR("iconLists"), iconLists);
-                            
-                            CFMutableArrayRef mutableInnerArray = CFArrayCreateMutableCopy(kCFAllocatorDefault, 0, innerArray);
-                            
-                            CFArraySetValueAtIndex(mutableInnerArray, innerIndex, magicFolder);
-                            CFArraySetValueAtIndex(iconStateArray, outerIndex, mutableInnerArray);
-
-                            
-                            CFRelease(mutableInnerArray);
-                            CFRelease(iconLists);
-                            CFRelease(singleList);
-                            CFRelease(magicFolder);
-                            
-                            shouldBreak = 1;
-                            break;
-                        }
-                    }
-                    
-                    if (shouldBreak)
-                        break;
-                }
+                CFMutableArrayRef processedState = process_iconState(iconStateArray, &foundNewsstand);
                 
                 if (foundNewsstand)
                 {
+                    CFDictionaryRemoveValue(dict, CFSTR("formatVersion"));
+                    CFDictionarySetValue(dict, CFSTR("command"), CFSTR("setIconState"));
                     
-                    CFDictionarySetValue(dict, CFSTR("command"), CFSTR("setIconState"));                    
-                    CFDictionarySetValue(dict, CFSTR("iconState"), (CFPropertyListRef)iconStateArray);
+                    CFDictionarySetValue(dict, CFSTR("iconState"), (CFPropertyListRef)processedState);
                     
-                    CFRelease(iconStateArray);
-                    
+                    CFRelease(processedState);                    
                     
                     if (send_xml_message(connection, dict))
                     {
@@ -289,7 +304,6 @@ void hide_newsstand(struct am_device *device)
                 } else {
                     
                     [delegateInstance updateLabel:@"Couldn't find Newsstand. Has it already been hidden?"];
-                    
                 }
                 
                 CFRelease(reply);
@@ -321,7 +335,7 @@ bool send_xml_message(service_conn_t connection, CFDictionaryRef dict)
     }
     
     
-    CFPropertyListRef msgData = CFPropertyListCreateData(NULL, dict, kCFPropertyListXMLFormat_v1_0,0,NULL);
+    CFPropertyListRef msgData = CFPropertyListCreateData(NULL, dict, kCFPropertyListBinaryFormat_v1_0,0,NULL);
     
     if (!msgData)
     {
