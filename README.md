@@ -7,7 +7,7 @@ StifleStand is a simple application which allows you to put the Newsstand icon i
 <img src="http://filippobiga.com/stiflestand/sstand.png" alt="StifleStand OS X">
 
 ## Credits
-[Filippo Bigarella](http://github.com/FilippoBiga)</br>
+[Filippo Bigarella](http://github.com/FilippoBiga)  
 [@FilippoBiga] (http://twitter.com/FilippoBiga) 
 
 There is also a Windows version of StifleStand, written by [@SwissHttp](http://twitter.com/SwissHttp).
