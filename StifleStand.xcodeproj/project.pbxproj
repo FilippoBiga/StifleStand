@@ -1,0 +1,327 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		9D64EC811622F0CC005810E3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D64EC801622F0CC005810E3 /* Cocoa.framework */; };
+		9D64EC8B1622F0CC005810E3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9D64EC891622F0CC005810E3 /* InfoPlist.strings */; };
+		9D64EC8D1622F0CC005810E3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D64EC8C1622F0CC005810E3 /* main.m */; };
+		9D64EC911622F0CC005810E3 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 9D64EC8F1622F0CC005810E3 /* Credits.rtf */; };
+		9D64EC941622F0CC005810E3 /* SSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D64EC931622F0CC005810E3 /* SSAppDelegate.m */; };
+		9D64EC971622F0CC005810E3 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9D64EC951622F0CC005810E3 /* MainMenu.xib */; };
+		9D64EC9F1622F119005810E3 /* MobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D64EC9E1622F119005810E3 /* MobileDevice.framework */; };
+		9D939D3416231A6800EE36BC /* StifleStand.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9D939D3316231A6800EE36BC /* StifleStand.icns */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		9D64EC7C1622F0CC005810E3 /* StifleStand.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StifleStand.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D64EC801622F0CC005810E3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		9D64EC831622F0CC005810E3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		9D64EC841622F0CC005810E3 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		9D64EC851622F0CC005810E3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		9D64EC881622F0CC005810E3 /* StifleStand-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "StifleStand-Info.plist"; sourceTree = "<group>"; };
+		9D64EC8A1622F0CC005810E3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		9D64EC8C1622F0CC005810E3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		9D64EC8E1622F0CC005810E3 /* StifleStand-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StifleStand-Prefix.pch"; sourceTree = "<group>"; };
+		9D64EC901622F0CC005810E3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		9D64EC921622F0CC005810E3 /* SSAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSAppDelegate.h; sourceTree = "<group>"; };
+		9D64EC931622F0CC005810E3 /* SSAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SSAppDelegate.m; sourceTree = "<group>"; };
+		9D64EC961622F0CC005810E3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		9D64EC9D1622F0FE005810E3 /* MobileDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MobileDevice.h; sourceTree = "<group>"; };
+		9D64EC9E1622F119005810E3 /* MobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileDevice.framework; path = /System/Library/PrivateFrameworks/MobileDevice.framework; sourceTree = "<absolute>"; };
+		9D939D3316231A6800EE36BC /* StifleStand.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = StifleStand.icns; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9D64EC791622F0CC005810E3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9D64EC811622F0CC005810E3 /* Cocoa.framework in Frameworks */,
+				9D64EC9F1622F119005810E3 /* MobileDevice.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9D64EC711622F0CC005810E3 = {
+			isa = PBXGroup;
+			children = (
+				9D64EC861622F0CC005810E3 /* StifleStand */,
+				9D64EC7F1622F0CC005810E3 /* Frameworks */,
+				9D64EC7D1622F0CC005810E3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		9D64EC7D1622F0CC005810E3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9D64EC7C1622F0CC005810E3 /* StifleStand.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9D64EC7F1622F0CC005810E3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9D64EC9E1622F119005810E3 /* MobileDevice.framework */,
+				9D64EC801622F0CC005810E3 /* Cocoa.framework */,
+				9D64EC821622F0CC005810E3 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9D64EC821622F0CC005810E3 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9D64EC831622F0CC005810E3 /* AppKit.framework */,
+				9D64EC841622F0CC005810E3 /* CoreData.framework */,
+				9D64EC851622F0CC005810E3 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		9D64EC861622F0CC005810E3 /* StifleStand */ = {
+			isa = PBXGroup;
+			children = (
+				9D64EC9D1622F0FE005810E3 /* MobileDevice.h */,
+				9D64EC921622F0CC005810E3 /* SSAppDelegate.h */,
+				9D64EC931622F0CC005810E3 /* SSAppDelegate.m */,
+				9D64EC951622F0CC005810E3 /* MainMenu.xib */,
+				9D64EC871622F0CC005810E3 /* Supporting Files */,
+			);
+			path = StifleStand;
+			sourceTree = "<group>";
+		};
+		9D64EC871622F0CC005810E3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9D939D3316231A6800EE36BC /* StifleStand.icns */,
+				9D64EC881622F0CC005810E3 /* StifleStand-Info.plist */,
+				9D64EC891622F0CC005810E3 /* InfoPlist.strings */,
+				9D64EC8C1622F0CC005810E3 /* main.m */,
+				9D64EC8E1622F0CC005810E3 /* StifleStand-Prefix.pch */,
+				9D64EC8F1622F0CC005810E3 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9D64EC7B1622F0CC005810E3 /* StifleStand */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9D64EC9A1622F0CC005810E3 /* Build configuration list for PBXNativeTarget "StifleStand" */;
+			buildPhases = (
+				9D64EC781622F0CC005810E3 /* Sources */,
+				9D64EC791622F0CC005810E3 /* Frameworks */,
+				9D64EC7A1622F0CC005810E3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StifleStand;
+			productName = StifleStand;
+			productReference = 9D64EC7C1622F0CC005810E3 /* StifleStand.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9D64EC731622F0CC005810E3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = SS;
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = "Filippo Bigarella";
+			};
+			buildConfigurationList = 9D64EC761622F0CC005810E3 /* Build configuration list for PBXProject "StifleStand" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 9D64EC711622F0CC005810E3;
+			productRefGroup = 9D64EC7D1622F0CC005810E3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9D64EC7B1622F0CC005810E3 /* StifleStand */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9D64EC7A1622F0CC005810E3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9D64EC8B1622F0CC005810E3 /* InfoPlist.strings in Resources */,
+				9D64EC911622F0CC005810E3 /* Credits.rtf in Resources */,
+				9D64EC971622F0CC005810E3 /* MainMenu.xib in Resources */,
+				9D939D3416231A6800EE36BC /* StifleStand.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9D64EC781622F0CC005810E3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9D64EC8D1622F0CC005810E3 /* main.m in Sources */,
+				9D64EC941622F0CC005810E3 /* SSAppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		9D64EC891622F0CC005810E3 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9D64EC8A1622F0CC005810E3 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		9D64EC8F1622F0CC005810E3 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9D64EC901622F0CC005810E3 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		9D64EC951622F0CC005810E3 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9D64EC961622F0CC005810E3 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		9D64EC981622F0CC005810E3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		9D64EC991622F0CC005810E3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		9D64EC9B1622F0CC005810E3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "StifleStand/StifleStand-Prefix.pch";
+				INFOPLIST_FILE = "StifleStand/StifleStand-Info.plist";
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.7;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		9D64EC9C1622F0CC005810E3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "StifleStand/StifleStand-Prefix.pch";
+				INFOPLIST_FILE = "StifleStand/StifleStand-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.7;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9D64EC761622F0CC005810E3 /* Build configuration list for PBXProject "StifleStand" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9D64EC981622F0CC005810E3 /* Debug */,
+				9D64EC991622F0CC005810E3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9D64EC9A1622F0CC005810E3 /* Build configuration list for PBXNativeTarget "StifleStand" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9D64EC9B1622F0CC005810E3 /* Debug */,
+				9D64EC9C1622F0CC005810E3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9D64EC731622F0CC005810E3 /* Project object */;
+}
