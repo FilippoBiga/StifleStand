@@ -13,21 +13,15 @@
 
 void amdevice_Callback(struct am_device_notification_callback_info *info, void *context);
 
-
-//kern_return_t send_message(void *socket, CFPropertyListRef plist);
-//CFPropertyListRef receive_message(void *socket);
-
-// we use these instead of the private routines above
-bool send_xml_message(service_conn_t connection, CFDictionaryRef dict);
-CFPropertyListRef receive_xml_reply(service_conn_t connection, CFStringRef *error);
-
+bool send_bplist_message(service_conn_t connection, CFDictionaryRef dict);
+CFPropertyListRef receive_reply(service_conn_t connection, CFStringRef *error);
 
 void hide_newsstand(struct am_device *device);
+
 
 static SSAppDelegate *delegateInstance = nil;
 static struct am_device *device;
 static BOOL foundDevice = NO;
-
 
 @implementation SSAppDelegate
 
@@ -39,9 +33,9 @@ static BOOL foundDevice = NO;
 #ifdef SS_DEBUG
     AMDSetLogLevel(INT_MAX);
     AMDAddLogFileDescriptor(fileno(stdout));
-    #define DLog(...)   NSLog(__VA_ARGS__)
+#define DLog(...)   NSLog(__VA_ARGS__)
 #else
-    #define DLog(...)
+#define DLog(...)
 #endif
     
     delegateInstance = self;
@@ -97,18 +91,18 @@ static BOOL foundDevice = NO;
 
 
 void amdevice_Callback(struct am_device_notification_callback_info *info, void *context)
-{        
+{
     switch (info->msg)
     {
         case ADNCI_MSG_CONNECTED:
         {
             DLog(@"ADNCI_MSG_CONNECTED");
-
+            
             if (foundDevice)
                 return;
-
+            
             device = info->dev;
-
+            
             if (AMDeviceConnect(device) == MDERR_OK)
             {
                 if (AMDeviceIsPaired(device) && (AMDeviceValidatePairing(device) == MDERR_OK))
@@ -118,7 +112,7 @@ void amdevice_Callback(struct am_device_notification_callback_info *info, void *
                         DLog(@"Started session");
                         
                         CFStringRef name = (CFStringRef)AMDeviceCopyValue(device, 0, CFSTR("DeviceName"));
-
+                        
                         NSString *status = [NSString stringWithFormat:@"Device connected: %@", (NSString *)name];
                         
                         CFRelease(name);
@@ -132,7 +126,7 @@ void amdevice_Callback(struct am_device_notification_callback_info *info, void *
                     }
                 }
             }
-           
+            
             break;
         }
             
@@ -141,7 +135,7 @@ void amdevice_Callback(struct am_device_notification_callback_info *info, void *
             DLog(@"ADNCI_MSG_DISCONNECTED");
             
             foundDevice = NO;
-
+            
             AMDeviceRelease(device);
             AMDeviceStopSession(device);
             AMDeviceDisconnect(device);
@@ -193,8 +187,8 @@ CFMutableArrayRef process_iconState(CFArrayRef iconState, int *didFindNewsstand)
                 
                 CFDictionarySetValue(magicFolder, CFSTR("displayName"), CFSTR("Magic"));
                 CFDictionarySetValue(magicFolder, CFSTR("listType"), CFSTR("folder"));
-
-
+                
+                
                 CFMutableArrayRef iconLists = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
                 CFMutableArrayRef singleList = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
                 
@@ -208,14 +202,14 @@ CFMutableArrayRef process_iconState(CFArrayRef iconState, int *didFindNewsstand)
                 CFRelease(iconLists);
                 CFRelease(singleList);
                 CFRelease(magicFolder);
-
+                
             } else
             {
                 CFDictionaryRemoveValue(iconDict, CFSTR("iconModDate"));
                 CFArrayAppendValue(processedInnerArray, iconDict);
-                
-                CFRelease(iconDict);
             }
+            
+            CFRelease(iconDict);
         }
         
         CFArrayAppendValue(processedState, processedInnerArray);
@@ -252,9 +246,9 @@ void hide_newsstand(struct am_device *device)
         
         DLog(@"Getting icon state from device");
         
-        if (send_xml_message(connection, dict))
+        if (send_bplist_message(connection, dict))
         {
-            CFPropertyListRef reply = receive_xml_reply(connection, &error);
+            CFPropertyListRef reply = receive_reply(connection, &error);
             
             if (reply)
             {
@@ -272,11 +266,11 @@ void hide_newsstand(struct am_device *device)
                     
                     CFDictionarySetValue(dict, CFSTR("iconState"), (CFPropertyListRef)processedState);
                     
-                    CFRelease(processedState);                    
+                    CFRelease(processedState);
                     
-                    if (send_xml_message(connection, dict))
+                    if (send_bplist_message(connection, dict))
                     {
-                        CFPropertyListRef _repl = receive_xml_reply(connection, &error);
+                        CFPropertyListRef _repl = receive_reply(connection, &error);
                         if (_repl)
                         {
                             CFShow(_repl);
@@ -289,7 +283,7 @@ void hide_newsstand(struct am_device *device)
                             CFRelease(error);
                             
                         } else {
-                        
+                            
                             [delegateInstance updateLabel:@"Done!"];
                         }
                         
@@ -315,7 +309,7 @@ void hide_newsstand(struct am_device *device)
                     DLog(@"Error receiving icon state from device: %@", (NSString *)error);
                     CFRelease(error);
                 }
-
+                
                 [delegateInstance updateLabel:@"Couldn't get icon state!"];
             }
         }
@@ -325,35 +319,36 @@ void hide_newsstand(struct am_device *device)
 }
 
 
-bool send_xml_message(service_conn_t connection, CFDictionaryRef dict)
+bool send_bplist_message(service_conn_t connection, CFDictionaryRef dict)
 {
 	bool result = false;
+    int sock = (int)((uint32_t)connection);
+    
     if (!dict)
     {
-        DLog(@"NULL dictionary passed to send_xml_message!");
+        DLog(@"NULL dictionary passed to send_bplist_message!");
         return result;
     }
-    
     
     CFPropertyListRef msgData = CFPropertyListCreateData(NULL, dict, kCFPropertyListBinaryFormat_v1_0,0,NULL);
     
     if (!msgData)
     {
-        DLog(@"Can't convert request to XML");
+        DLog(@"Can't convert request to binary plist");
         return false;
     }
     
     CFIndex msgLen = CFDataGetLength(msgData);
-    uint32_t size = htonl(msgLen);    
+    uint32_t size = htonl(msgLen);
     
     
-//    DLog(@"Sending msg:\n{ \n\tdata = [ %.*s ],\n\tlength = %ld", (int)msgLen, CFDataGetBytePtr(msgData), msgLen);
+    //    DLog(@"Sending msg:\n{ \n\tdata = [ %.*s ],\n\tlength = %ld", (int)msgLen, CFDataGetBytePtr(msgData), msgLen);
     DLog(@"Sending msg of length: %ld (size=%d)", msgLen, size);
     
-    if (send((int)connection, &size, sizeof(uint32_t), 0) == sizeof(size))
+    if (send(sock, &size, sizeof(uint32_t), 0) == sizeof(size))
     {
-        ssize_t bytesSent = send((int)connection, CFDataGetBytePtr(msgData), msgLen, 0);
-        NSLog(@"bytesSent: %ld\tmsgLen: %ld", bytesSent,msgLen);
+        ssize_t bytesSent = send(sock, CFDataGetBytePtr(msgData), msgLen, 0);
+        NSLog(@"bytesSent: %ld\tmsgLen: %ld", bytesSent, msgLen);
         
         if (bytesSent == msgLen)
         {
@@ -362,13 +357,13 @@ bool send_xml_message(service_conn_t connection, CFDictionaryRef dict)
             
         } else {
             
-            DLog(@"Can't send message data");
+            DLog(@"Couldn't send message data");
             result = false;
         }
         
     } else {
         
-        DLog(@"Can't send message size");
+        DLog(@"Couldn't send message size");
         result = false;
     }
     
@@ -376,7 +371,7 @@ bool send_xml_message(service_conn_t connection, CFDictionaryRef dict)
     return result;
 }
 
-CFPropertyListRef receive_xml_reply(service_conn_t connection, CFStringRef *error)
+CFPropertyListRef receive_reply(service_conn_t connection, CFStringRef *error)
 {
 	CFPropertyListRef reply = NULL;
 	int sock = (int)((uint32_t)connection);
@@ -426,7 +421,7 @@ CFPropertyListRef receive_xml_reply(service_conn_t connection, CFStringRef *erro
             DLog(@"%@",*((NSString **)error));
             free(buff);
             return NULL;
-        }        
+        }
         
         left -= received, p += received;
     }
